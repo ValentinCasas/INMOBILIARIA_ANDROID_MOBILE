@@ -1,5 +1,6 @@
 package com.example.inmobiliaria_android_mobile.ui.inquilinos;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -39,12 +40,21 @@ public class InquilinosFragment extends Fragment {
         mv = new ViewModelProvider(this).get(InquilinosViewModel.class);
         View root = binding.getRoot();
 
+        mv.obtenerPropiedadesAlquiladas();
 
-        RecyclerView rv = binding.rvLista;
-        GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(grilla);
-        InquilinosAdapter adapter = new InquilinosAdapter(getContext(), mv.obtenerPropiedadesAlquiladas(), getLayoutInflater());
-        rv.setAdapter(adapter);
+        mv.getInmueblesAlquilados().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
+            @Override
+            public void onChanged(ArrayList<Inmueble> inmuebles) {
+
+                RecyclerView rv = binding.rvLista;
+                GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+                rv.setLayoutManager(grilla);
+                InquilinosAdapter adapter = new InquilinosAdapter(getContext(), inmuebles, getLayoutInflater());
+                rv.setAdapter(adapter);
+
+            }
+        });
+
 
         return root;
     }

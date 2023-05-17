@@ -1,5 +1,6 @@
 package com.example.inmobiliaria_android_mobile.ui.contratos;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -41,13 +42,19 @@ public class ContratosFragment extends Fragment {
         View root = binding.getRoot();
 
 
-        ArrayList<Inmueble> inmuebles = mv.propiedadesAlquiladas();
+        mv.propiedadesAlquiladas();
 
-        RecyclerView rv = binding.rvLista;
-        GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(grilla);
-        ContratosAdapter adapter = new ContratosAdapter(getContext(), inmuebles, getLayoutInflater());
-        rv.setAdapter(adapter);
+        mv.getProiedadesAlquiladasMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
+            @Override
+            public void onChanged(ArrayList<Inmueble> inmuebles) {
+
+                RecyclerView rv = binding.rvLista;
+                GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+                rv.setLayoutManager(grilla);
+                ContratosAdapter adapter = new ContratosAdapter(getContext(), inmuebles, getLayoutInflater());
+                rv.setAdapter(adapter);
+            }
+        });
 
         return root;
     }

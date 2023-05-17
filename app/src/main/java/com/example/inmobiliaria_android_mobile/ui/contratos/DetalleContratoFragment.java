@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -56,12 +57,21 @@ public class DetalleContratoFragment extends Fragment {
         binding.btnPagos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("pagosAsociados", mv.obtenerPagos(contrato));
-                navController.navigate(R.id.nav_detallePagosFragment, bundle);
+                mv.obtenerPagos(contrato);
+
+                mv.getPagosMutable().observe(getViewLifecycleOwner(), new Observer<ArrayList<Pago>>() {
+                    @Override
+                    public void onChanged(ArrayList<Pago> pagos) {
+                        NavController navController = Navigation.findNavController(v);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("pagosAsociados", pagos);
+                        navController.navigate(R.id.nav_detallePagosFragment, bundle);
+                    }
+                });
             }
         });
+
+
 
         return root;
     }

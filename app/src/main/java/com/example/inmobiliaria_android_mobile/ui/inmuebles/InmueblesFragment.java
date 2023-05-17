@@ -1,5 +1,6 @@
 package com.example.inmobiliaria_android_mobile.ui.inmuebles;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.inmobiliaria_android_mobile.R;
 import com.example.inmobiliaria_android_mobile.databinding.FragmentInmueblesBinding;
 import com.example.inmobiliaria_android_mobile.modelo.Inmueble;
+import com.example.inmobiliaria_android_mobile.modelo.Propietario;
 import com.example.inmobiliaria_android_mobile.request.ApiClient;
 
 import java.util.ArrayList;
@@ -36,12 +38,22 @@ public class InmueblesFragment extends Fragment {
         mv = new ViewModelProvider(this).get(InmueblesViewModel.class);
         View root = binding.getRoot();
 
+        mv.obtenerPropiedades();
 
-        RecyclerView rv = binding.rvLista;
-        GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(grilla);
-        InmueblesAdapter adapter = new InmueblesAdapter(getContext(), mv.obtenerPropiedades(), getLayoutInflater());
-        rv.setAdapter(adapter);
+        mv.getInmuebles().observe(getViewLifecycleOwner(), new Observer<ArrayList<Inmueble>>() {
+            @Override
+            public void onChanged(ArrayList<Inmueble> inmuebles) {
+
+                RecyclerView rv = binding.rvLista;
+                GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+                rv.setLayoutManager(grilla);
+                InmueblesAdapter adapter = new InmueblesAdapter(getContext(), inmuebles, getLayoutInflater());
+                rv.setAdapter(adapter);
+
+            }
+        });
+
+
 
         return root;
     }

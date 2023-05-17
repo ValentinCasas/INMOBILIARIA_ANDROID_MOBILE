@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.inmobiliaria_android_mobile.modelo.Inmueble;
@@ -16,6 +18,7 @@ public class ContratosViewModel extends AndroidViewModel {
 
     private ApiClient api;
     private Context context;
+    private MutableLiveData<ArrayList<Inmueble>> proiedadesAlquiladasMutable;
 
     public ContratosViewModel(@NonNull Application application) {
         super(application);
@@ -23,9 +26,19 @@ public class ContratosViewModel extends AndroidViewModel {
         api = ApiClient.getApi();
     }
 
-    public ArrayList<Inmueble> propiedadesAlquiladas(){
+    public LiveData<ArrayList<Inmueble>> getProiedadesAlquiladasMutable() {
+        if(proiedadesAlquiladasMutable == null){
+            proiedadesAlquiladasMutable = new MutableLiveData<>();
+        }
+        return proiedadesAlquiladasMutable;
+    }
+
+    public void propiedadesAlquiladas(){
+        if(proiedadesAlquiladasMutable == null){
+            proiedadesAlquiladasMutable = new MutableLiveData<>();
+        }
         ArrayList<Inmueble> inmuebles = api.obtenerPropiedadesAlquiladas();
-        return inmuebles;
+        proiedadesAlquiladasMutable.postValue(inmuebles);
     }
 
 }

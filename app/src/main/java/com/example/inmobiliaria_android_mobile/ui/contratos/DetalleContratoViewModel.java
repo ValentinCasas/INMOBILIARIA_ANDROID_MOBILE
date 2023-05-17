@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.inmobiliaria_android_mobile.modelo.Contrato;
@@ -17,15 +19,26 @@ public class DetalleContratoViewModel extends AndroidViewModel {
 
     private Context context;
     private ApiClient api;
+    private MutableLiveData<ArrayList<Pago>> pagosMutable;
     public DetalleContratoViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
         api = ApiClient.getApi();
     }
 
-    public ArrayList<Pago> obtenerPagos(Contrato contrato){
+    public LiveData<ArrayList<Pago>> getPagosMutable() {
+        if(pagosMutable == null){
+            pagosMutable = new MutableLiveData<>();
+        }
+        return pagosMutable;
+    }
+
+    public void obtenerPagos(Contrato contrato){
+        if(pagosMutable == null){
+            pagosMutable = new MutableLiveData<>();
+        }
         ArrayList<Pago> pagos = api.obtenerPagos(contrato);
-        return pagos;
+        pagosMutable.postValue(pagos);
     }
 
 
