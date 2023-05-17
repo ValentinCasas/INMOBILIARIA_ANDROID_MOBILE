@@ -16,12 +16,16 @@ public class InmueblesViewModel extends AndroidViewModel {
 
     private Context context;
     private ApiClient api;
+
     public InmueblesViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
         api = ApiClient.getApi();
     }
 
-
+    public ArrayList<Inmueble> obtenerPropiedades() {
+        ArrayList<Inmueble> inmuebles = api.obtnerPropiedades();
+        return inmuebles;
+    }
 
 }

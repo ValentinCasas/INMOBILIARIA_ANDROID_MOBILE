@@ -27,7 +27,6 @@ public class DetallePagosFragment extends Fragment {
 
     private FragmentDetallePagosBinding binding;
     private ArrayList<Pago> pagos;
-    private ApiClient api;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +34,6 @@ public class DetallePagosFragment extends Fragment {
 
         binding = FragmentDetallePagosBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
-        api = ApiClient.getApi();
 
         Bundle bundle = getArguments();
         pagos = (ArrayList<Pago>) bundle.getSerializable("pagosAsociados");

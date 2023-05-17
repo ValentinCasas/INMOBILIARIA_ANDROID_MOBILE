@@ -50,28 +50,47 @@ public class PerfilViewModel extends AndroidViewModel {
     ;
 
 
-    public void cambiarTextoBoton(String estadoBtn, Long dni, String nombre, String apellido, String email, String clave, String telefono) {
+    public void cambiarTextoBoton(String estadoBtn, String dni, String nombre, String apellido, String email, String clave, String telefono) {
         if (valorBotonMutable == null) {
             valorBotonMutable = new MutableLiveData<>();
         }
 
-        if (estadoBtn.equals("EDITAR")) {
-            valorBotonMutable.setValue("GUARDAR");
-        } else {
+        try {
+            if (estadoBtn.equals("EDITAR")) {
+                valorBotonMutable.setValue("GUARDAR");
+            } else {
+                // Validamos que los campos no estén vacíos o nulos
+                if (dni == null || nombre == null || apellido == null || email == null || clave == null || telefono == null || dni.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || clave.isEmpty() || telefono.isEmpty()) {
+                    throw new IllegalArgumentException("Por favor, complete todos los campos");
+                }
 
-            Propietario propietario = dataPropietarioMutable.getValue();
-            propietario.setDni(dni);
-            propietario.setNombre(nombre);
-            propietario.setApellido(apellido);
-            propietario.setEmail(email);
-            propietario.setContraseña(clave);
-            propietario.setTelefono(telefono);
+                // Validamos que el valor del campo "dni" sea un número válido y positivo
+                long dniLong = Long.parseLong(dni);
+                if (dniLong <= 0) {
+                    throw new IllegalArgumentException("Por favor, ingrese un DNI válido");
+                }
 
-            api.actualizarPerfil(propietario);
-            valorBotonMutable.setValue("EDITAR");
+                Propietario propietario = dataPropietarioMutable.getValue();
+                propietario.setDni(dniLong);
+                propietario.setNombre(nombre);
+                propietario.setApellido(apellido);
+                propietario.setEmail(email);
+                propietario.setContraseña(clave);
+                propietario.setTelefono(telefono);
+
+                api.actualizarPerfil(propietario);
+                valorBotonMutable.setValue("EDITAR");
+            }
+        } catch (NumberFormatException e) {
+            // Mostramos un Toast con el error
+            Toast.makeText(context, "Por favor, ingrese un DNI válido", Toast.LENGTH_SHORT).show();
+        } catch (IllegalArgumentException e) {
+            // Mostramos un Toast con el error
+            Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
         }
-
     }
+
+
 }
 
 

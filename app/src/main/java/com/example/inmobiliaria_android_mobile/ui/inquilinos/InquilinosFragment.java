@@ -28,8 +28,6 @@ public class InquilinosFragment extends Fragment {
 
     private InquilinosViewModel mv;
     private FragmentInquilinosBinding binding;
-    private ApiClient api;
-
     public static InquilinosFragment newInstance() {
         return new InquilinosFragment();
     }
@@ -38,25 +36,17 @@ public class InquilinosFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentInquilinosBinding.inflate(inflater, container, false);
+        mv = new ViewModelProvider(this).get(InquilinosViewModel.class);
         View root = binding.getRoot();
 
-        api = ApiClient.getApi();
 
-
-        ArrayList<Inmueble> inmuebles = api.obtenerPropiedadesAlquiladas();
         RecyclerView rv = binding.rvLista;
         GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         rv.setLayoutManager(grilla);
-        InquilinosAdapter adapter = new InquilinosAdapter(getContext(), inmuebles, getLayoutInflater());
+        InquilinosAdapter adapter = new InquilinosAdapter(getContext(), mv.obtenerPropiedadesAlquiladas(), getLayoutInflater());
         rv.setAdapter(adapter);
 
         return root;
-    }
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mv = new ViewModelProvider(this).get(InquilinosViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

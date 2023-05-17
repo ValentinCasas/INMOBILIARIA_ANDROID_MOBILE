@@ -26,9 +26,8 @@ import java.util.ArrayList;
 
 public class ContratosFragment extends Fragment {
 
-    private ContratosViewModel mViewModel;
+    private ContratosViewModel mv;
     private FragmentContratosBinding binding;
-    private ApiClient api;
 
     public static InquilinosFragment newInstance() {
         return new InquilinosFragment();
@@ -38,12 +37,12 @@ public class ContratosFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentContratosBinding.inflate(inflater, container, false);
+        mv = new ViewModelProvider(this).get(ContratosViewModel.class);
         View root = binding.getRoot();
 
-        api = ApiClient.getApi();
 
+        ArrayList<Inmueble> inmuebles = mv.propiedadesAlquiladas();
 
-        ArrayList<Inmueble> inmuebles = api.obtenerPropiedadesAlquiladas();
         RecyclerView rv = binding.rvLista;
         GridLayoutManager grilla = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         rv.setLayoutManager(grilla);
@@ -53,11 +52,5 @@ public class ContratosFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ContratosViewModel.class);
-        // TODO: Use the ViewModel
-    }
 
 }

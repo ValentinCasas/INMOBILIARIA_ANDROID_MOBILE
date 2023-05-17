@@ -21,7 +21,7 @@ import com.example.inmobiliaria_android_mobile.databinding.FragmentLogoutBinding
 
 public class LogoutFragment extends Fragment {
 
-    private LogoutViewModel mViewModel;
+    private LogoutViewModel mv;
     private FragmentLogoutBinding binding;
 
     public static LogoutFragment newInstance() {
@@ -32,37 +32,8 @@ public class LogoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLogoutBinding.inflate(inflater, container, false);
-        mostrarDialogoDeConfirmacion();
+        mv = new ViewModelProvider(this).get(LogoutViewModel.class);
+        mv.mostrarDialogoDeConfirmacion(this);
         return binding.getRoot();
     }
-
-
-    private void mostrarDialogoDeConfirmacion() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Cierre de sesión");
-        builder.setMessage("¿Está seguro que desea cerrar la sesión?");
-        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // Cierra la sesión y lleva al usuario de vuelta al MainActivity
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
-
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-    }
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(LogoutViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

@@ -16,6 +16,7 @@ import com.example.inmobiliaria_android_mobile.databinding.FragmentDetalleInmueb
 import com.example.inmobiliaria_android_mobile.databinding.FragmentInmueblesBinding;
 import com.example.inmobiliaria_android_mobile.modelo.Inmueble;
 import com.example.inmobiliaria_android_mobile.request.ApiClient;
+import com.example.inmobiliaria_android_mobile.ui.contratos.ContratosViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ public class DetalleInmuebleFragment extends Fragment {
     private DetalleInmuebleViewModel mv;
     private FragmentDetalleInmuebleBinding binding;
     private Inmueble inmueble;
-    private ApiClient api;
 
     public static DetalleInmuebleFragment newInstance() {
         return new DetalleInmuebleFragment();
@@ -37,11 +37,9 @@ public class DetalleInmuebleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDetalleInmuebleBinding.inflate(inflater, container, false);
+        mv = new ViewModelProvider(this).get(DetalleInmuebleViewModel.class);
         View root = binding.getRoot();
 
-        api = ApiClient.getApi();
-
-        api = ApiClient.getApi();
         Bundle bundle = getArguments();
         inmueble = (Inmueble) bundle.getSerializable("inmueble");
 
@@ -57,7 +55,7 @@ public class DetalleInmuebleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 inmueble.setEstado(binding.cbEstado.isChecked());
-                api.actualizarInmueble(inmueble);
+                mv.actualizarInmueble(inmueble);
             }
         });
 

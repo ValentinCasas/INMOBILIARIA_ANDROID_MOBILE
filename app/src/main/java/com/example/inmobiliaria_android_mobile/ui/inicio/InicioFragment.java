@@ -41,6 +41,8 @@ public class InicioFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_inicio, container, false);
+        mv = new ViewModelProvider(this).get(InicioViewModel.class);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -50,13 +52,6 @@ public class InicioFragment extends Fragment implements OnMapReadyCallback {
         }
 
         return root;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mv = new ViewModelProvider(this).get(InicioViewModel.class);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
     }
 
 
@@ -77,8 +72,8 @@ public class InicioFragment extends Fragment implements OnMapReadyCallback {
             mMap.setMyLocationEnabled(true);
 
             mv.getUbicacionActual().observe(getViewLifecycleOwner(), location -> {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
             });
 
             mv.actualizarUbicacion();

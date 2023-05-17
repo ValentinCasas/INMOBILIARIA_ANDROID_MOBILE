@@ -60,14 +60,13 @@ public class PerfilFragment extends Fragment {
             public void onClick(View v) {
                 String estadoBtn = binding.btnEditar.getText().toString();
                 String dniString = binding.tvDni.getText().toString();
-                long dni = Long.parseLong(dniString);
                 String nombre = binding.tvNombre.getText().toString();
                 String apellido = binding.tvApellido.getText().toString();
                 String email = binding.tvMail.getText().toString();
                 String contrasenia = binding.tvClave.getText().toString();
                 String telefono = binding.tvPerfilTelefono.getText().toString();
 
-                mv.cambiarTextoBoton(estadoBtn, dni, nombre, apellido, email, contrasenia, telefono);
+                mv.cambiarTextoBoton(estadoBtn, dniString, nombre, apellido, email, contrasenia, telefono);
             }
         });
 

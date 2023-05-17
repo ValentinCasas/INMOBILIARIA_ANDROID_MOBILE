@@ -51,7 +51,7 @@ public class InmueblesAdapter extends RecyclerView.Adapter<InmueblesAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.direccion.setText(inmuebles.get(position).getDireccion());
         holder.monto.setText(inmuebles.get(position).getPrecio() + "");
-        Picasso.get().load(inmuebles.get(position).getImagen()).into(holder.fotoInmueble);
+        Glide.with(context).load(inmuebles.get(position).getImagen()).into(holder.fotoInmueble);
 
 
     }

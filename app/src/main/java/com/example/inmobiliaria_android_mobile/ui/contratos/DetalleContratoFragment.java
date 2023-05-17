@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -28,19 +29,19 @@ public class DetalleContratoFragment extends Fragment {
 
     private FragmentDetalleContratoBinding binding;
     private Contrato contrato;
-    private ApiClient api;
+    private DetalleContratoViewModel mv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentDetalleContratoBinding.inflate(getLayoutInflater());
+        mv = new ViewModelProvider(this).get(DetalleContratoViewModel.class);
         View root = binding.getRoot();
-        api = ApiClient.getApi();
+
 
         Bundle bundle = getArguments();
         contrato = (Contrato) bundle.getSerializable("contratoDelInmueble");
-
 
         Inquilino inquilino = contrato.getInquilino();
         Inmueble inmueble = contrato.getInmueble();
@@ -52,18 +53,18 @@ public class DetalleContratoFragment extends Fragment {
         binding.tvInquilino.setText(inquilino.getNombre());
         binding.tvInmueble.setText(inmueble.getDireccion());
 
-        ArrayList<Pago> pagos = api.obtenerPagos(contrato);
-
         binding.btnPagos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(v);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("pagosAsociados", pagos);
+                bundle.putSerializable("pagosAsociados", mv.obtenerPagos(contrato));
                 navController.navigate(R.id.nav_detallePagosFragment, bundle);
             }
         });
 
         return root;
     }
+
+
 }
