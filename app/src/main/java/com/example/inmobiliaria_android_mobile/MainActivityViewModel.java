@@ -28,7 +28,6 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     }
 
-
     public void confirmarLogin(String mail, String clave) {
         Propietario propietario = api.login(mail, clave);
         if (propietario != null) {
